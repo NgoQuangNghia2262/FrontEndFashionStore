@@ -1,0 +1,7 @@
+#Component_Product{
+    & .title{
+        font-size: 16px;
+        margin: 10px 0;
+        font-weight: 600;
+    }
+}

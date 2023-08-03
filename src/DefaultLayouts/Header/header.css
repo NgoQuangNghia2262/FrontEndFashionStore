@@ -1,0 +1,81 @@
+
+#DefaultLayout_Header{
+    .header_TopBar{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1c5b41;
+    }
+    .header_TopBar_Container{
+        width: 75%;
+        height: 44px;
+        display: flex;
+        justify-content: space-between;
+        margin: 20px;
+    }
+    .header_TopBar_Container > div {
+        line-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    .header_TopBar_Container_Search {
+        width: 475px;
+    }
+    .header_TopBar_Container_Search form{
+        display: flex;
+        background-color: #fff;
+        border-radius: 44px;
+        width: 100%;
+    }
+    
+    .header_TopBar_Container_Search-text{
+        width: 150px;
+        text-align: center;
+        border-right: 1px #e5e5e5 solid;
+    }
+    .header_TopBar_Container_Search-input input{
+        height: 44px;
+        width: 100%;
+        padding-left: 15px;
+    }
+    .header_TopBar_Container_Search-icon{
+        font-size: 20px;
+        width: 90px;
+        background-color: #fe9614;
+        border-radius: 0 40px 40px 0;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .header_TopBar_Container_Search-icon svg{
+        width: 20px;
+        height: 20px;
+        fill: #fff;
+    }
+    .header_TopBar_Container_User{
+        position: relative;
+    }
+    .header_TopBar_Container_User > a{
+        position: absolute;
+        top: 7px;
+        left: 0;
+    }
+    .headerMenu_container{
+        display: flex;
+        justify-content: space-between;
+        margin: 0 auto;
+    }
+    .headerMenu_container_Menu ul{
+        display: flex;
+    }
+    .headerMenu a{
+        color: #1c5b41;
+        font-size: 15px;
+        margin: 0 10px;
+        font-weight: 600;
+    }
+    .headerMenu ul li a:hover{
+        color: #fe9614;
+    }
+}

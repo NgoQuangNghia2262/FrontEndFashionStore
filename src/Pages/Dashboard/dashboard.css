@@ -1,0 +1,95 @@
+#PageDashboard{
+    & > .container{
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        & > .left{
+            width: 75%;
+            margin-right: 20px;
+            & >.billinday{
+                background-color: #fff;
+                box-shadow: 0px 2px 4px rgba(168, 168, 168, 0.25);
+                & svg{
+                    color : #fff;
+                }
+                & > .bot{
+                    display: flex;
+                    & > .bot-item{
+                        width: 25%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 18px 0;
+                        & > .content{
+                            margin-left: 7px;
+                            & > h6{
+                                font-size: 14px;
+                                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                                font-weight: 500;
+                            }
+                            & > h5{
+                                font-size: 16px;
+                                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                                font-weight: 500;
+                            }
+                        }
+                        & > .icon{
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+                & >.top{
+                    border-bottom: 1px solid #E8EAEB;
+                    padding: 20px 15px;
+                    & > .title > span{
+                        font-size: 18px;
+                        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                        font-weight: 500;
+                        line-height: 20px;
+                        color: #182537;
+                    }
+                }            
+            }
+            & > .sales{
+                margin-top: 25px;
+                background-color: #fff;
+                box-shadow: 0px 2px 4px rgba(168, 168, 168, 0.25);
+                padding: 22px 14px;
+                & > .title > span{
+                    font-size: 18px;
+                    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                    font-weight: 500;
+                    line-height: 20px;
+                    color: #182537;
+                }
+            }
+        }
+        & > .right{
+            flex : 1;
+            & > .ads > img{
+                width: 100%;
+                height: 138px;
+                margin-bottom: 15px;
+                box-shadow: 0px 2px 4px rgba(168, 168, 168, 0.25);
+            }
+            & > .recent_activities{
+                background-color: #fff;
+                box-shadow: 0px 2px 4px rgba(168, 168, 168, 0.25);
+                padding: 15px 10px;
+                min-height: 300px;
+                & > .title > span{
+                    font-size: 18px;
+                    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                    font-weight: 500;
+                    line-height: 20px;
+                    color: #182537;
+                }
+            }
+        }
+    }
+}

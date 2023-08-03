@@ -1,0 +1,91 @@
+#PageProduct{
+    & #components_wrapButton{
+        width: 100%;
+    }
+    & .container{
+        width: 75%;
+        margin: 50px auto;
+        display: flex;
+        & .img img{
+            width: 600px;
+            height: 600px;
+        }
+        & .info{
+            flex: 1;
+            padding: 0 30px;
+
+            & .idproduct{
+                font-size: 15px;
+                color: #484848;
+                margin: 10px 0;
+            }
+            & .newPrice{
+                font-weight: 700;
+                font-size: 28px;
+                line-height: 40px;
+                text-transform: uppercase;
+                color: #FF6563;
+            }
+            & .service{
+                display: flex;
+                margin: 35px 0;
+
+                & > div{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    margin-left: 20px;
+                    & > h3{
+                        font-weight: 700;
+                        font-size: 18px;
+                        color: #484848;
+                    }
+                    & > span{
+                        font-weight: 500;
+                        font-size: 16px;
+                        color: #484848;
+                    }
+                }
+            }
+            & .wrapsize , & .wrapcolor , & .wrapquantity {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+            }
+            & .text{
+                margin: 15px 0;
+                display: inline-block;
+                color: #757575;
+                width: 76px;
+                text-transform: capitalize;
+                flex-shrink: 0;
+            }
+            & .quantity{
+                width: 35px;
+                height: 30px;
+                text-align: center;
+                display: inline-block;
+                margin-top: 20px;
+            }
+            & .wrapcolor .color .color-item , & .wrapsize .size .size-item{
+                border: 1px solid rgba(0,0,0,.09);
+                width : 40px;
+                height : 40px;
+                display : flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 10px;
+                font-size: 12px;
+            }
+            & .wrapcolor .color .selected{
+                border: 1px solid red;
+                color: red;
+            }
+            & .wrapsize .size .selected{
+                border: 1px solid red;
+                color: red;
+            }
+        }
+    }
+}

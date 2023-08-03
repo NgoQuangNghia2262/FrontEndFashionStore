@@ -1,0 +1,7 @@
+#Pageposv1{
+    & > .bills{
+        width: 15%;
+        border: 1px solid;
+        height: 100vh;
+    }
+}

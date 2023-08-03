@@ -1,0 +1,81 @@
+#DefaultLayouts_ListProduct{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px 0;
+    & .container{
+        width: 75%;
+        margin: 0px auto;
+       & .product_header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+           padding: 50px 0;
+            & ::before{
+                content: "";
+                position: absolute;
+                width: 105px;
+                height: 3px;
+                background-color: #fe9614;
+                border-radius: 1px;
+                top : -23px;
+            }
+            & .title > h1{
+                font-weight: 700;
+                font-size: 40px;
+                position: relative;
+            }
+            & .menu  ul {
+                display: flex;
+                align-items: center;
+                .activate {
+                    background-color: #fe9614;
+                    border-radius: 10px;
+                    color: #fff;
+                }
+                & :hover{
+                    color: #fff;
+                    background-color: #fe9614;
+                    border-radius: 10px;
+                }
+                & li{
+                    margin: 0 10px;
+                    padding: 10px 15px;
+                    font-size: 16px;
+                    min-width: 90px;
+                    text-align: center;
+                }
+                & svg{
+                    width: 20px;
+                    height: 20px;
+                    overflow: hidden;
+                    vertical-align: middle;
+                }
+            }
+        }
+        & .banner img{
+            max-width: 100%;
+            border-radius: 10px;
+            margin-right: 30px;
+            margin-bottom: 20px;
+        }
+        & .product_footer{
+            width: 100%;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: stretch;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        & #list_product{
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+    }
+      
+     
+}

@@ -1,0 +1,24 @@
+#DefaultLayout_HeaderMenu{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 11%;
+    background: #FFFAF0;
+     
+    .headerMenu_container_Menu ul{
+        display: flex;
+       
+    }
+    & a{
+        color: #1c5b41;
+        font-size: 15px;
+        margin: 0 10px;
+        font-weight: 600;
+    }
+    & ul li a:hover{
+        color: #fe9614;
+    }
+    .activate a{
+        color: #fe9614;
+    }
+   
+}
