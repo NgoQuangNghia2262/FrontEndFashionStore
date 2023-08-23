@@ -1,4 +1,5 @@
 import { fetchData } from "./fetchData.js";
+import { Variable } from "../static/variable.js";
 export class Product {
   constructor({
     img,
@@ -23,7 +24,7 @@ export class Product {
   }
   static async findOne({ name, color, size }) {
     try {
-      const url = `http://localhost:8080/v1/data/product/findone?name=${name}&color=${color}&size=${size}`;
+      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findone?name=${name}&color=${color}&size=${size}`;
       const productJson = await fetchData(url);
       return new Product(productJson.data);
     } catch {
@@ -32,7 +33,7 @@ export class Product {
   }
   static async findAll() {
     try {
-      const url = `http://localhost:8080/v1/data/product/findall`;
+      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findall`;
       const productsJson = await fetchData(url);
       const products = productsJson.data.map((product) => {
         return new Product(product);
@@ -44,7 +45,7 @@ export class Product {
   }
   static async findProductByName(name) {
     try {
-      const url = `http://localhost:8080/v1/data/product/findproductbyname?name=${name}`;
+      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findproductbyname?name=${name}`;
       const productsJson = await fetchData(url);
       const products = productsJson.data.map((product) => {
         return new Product(product);
@@ -57,7 +58,7 @@ export class Product {
   }
   static async findProductBySize(size) {
     try {
-      const url = `http://localhost:8080/v1/data/product/findproductbysize?size=${size}`;
+      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findproductbysize?size=${size}`;
       const productsJson = await fetchData(url);
       const products = productsJson.data.map((product) => {
         return new Product(product);
@@ -70,7 +71,7 @@ export class Product {
   static async findProductByPrice(price) {
     try {
       const productsJson = await fetchData(
-        `http://localhost:8080/v1/data/product/findProductByPrice?Price = ${price}`
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findProductByPrice?Price = ${price}`
       );
       const products = productsJson.data.map((product) => {
         return new Product(product);
@@ -83,7 +84,7 @@ export class Product {
   static async findProductGroupByName() {
     try {
       const productsJson = await fetchData(
-        "http://localhost:8080/v1/data/product/findproductgroupbyname"
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findproductgroupbyname`
       );
       const products = productsJson.data.map((product) => {
         return new Product(product);

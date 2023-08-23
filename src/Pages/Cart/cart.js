@@ -3,6 +3,7 @@ import { Product } from "../../fetchData/product.js";
 import { button } from "../../components/Button/button.js";
 import sheet from "./cart.css" assert { type: "css" };
 import { Bill } from "../../fetchData/bill.js";
+import { Variable } from "../../static/variable.js";
 document.adoptedStyleSheets.push(sheet);
 
 const product = (product, quantity) => {
@@ -10,7 +11,9 @@ const product = (product, quantity) => {
   productElement.className = "product-item";
   productElement.innerHTML = `
   <div class="left">
-    <img src="http://localhost:8080/v1/data/image/${product.img}" alt="">
+    <img src="${Variable.PROTOCOL}://${Variable.DOMAIN}${
+    Variable.PROT
+  }/v1/data/image/${product.img}" alt="">
     <span>${product.name}</span>
     <span>${product.size}</span>
     <span>${product.color}</span>
@@ -19,24 +22,34 @@ const product = (product, quantity) => {
     <p class="price">${product.price}</p>
     <p class="quantity">${quantity}</p>
     <p class="price">${product.price * quantity}</p>
+    <img src="./images/icons8-delete.svg" alt="" />
   </div>
-
   `;
-
+  productElement
+    .querySelector(".right > img")
+    .addEventListener("click", async () => {
+      const confirmDelete = confirm("Bạn có chắc muốn xóa phần tử này?");
+      if (!confirmDelete) {
+        return;
+      }
+      const billingDetail_Seleted = new BillingDetails({
+        nameProduct: product.name,
+        sizeProduct: product.size,
+        colorProduct: product.color,
+      });
+      billingDetail_Seleted
+        .delete()
+        .then((mess) => {
+          location.href = "/cart";
+          alert(mess);
+        })
+        .catch((mess) => {
+          alert(mess);
+        });
+    });
   return productElement;
 };
 export const cart = async () => {
-  let billingDetails = await BillingDetails.getCartForCustomer();
-  let total = 0;
-  let arrPromiesGetProduct = billingDetails.map((billingDetail) => {
-    total += billingDetail.price * billingDetail.quantity;
-    return Product.findOne({
-      name: billingDetail.nameProduct,
-      color: billingDetail.colorProduct,
-      size: billingDetail.sizeProduct,
-    });
-  });
-  let products = await Promise.all(arrPromiesGetProduct);
   const cartElement = document.createElement("div");
   cartElement.id = "PageCart";
   cartElement.innerHTML = `
@@ -55,7 +68,7 @@ export const cart = async () => {
   <div class="container_total">
     <div>
       <p>Tổng tiền</p>
-      <span class="total">${total}</span>
+      <span class="total"></span>
     </div>
     <nav class="note">
       <p>Ghi chú</p>
@@ -63,18 +76,34 @@ export const cart = async () => {
     </nav>
   </div>
   `;
-  billingDetails.forEach((billingDetail) => {
-    let item = products.find((element) => {
-      return (
-        element.name === billingDetail.nameProduct &&
-        element.color === billingDetail.colorProduct &&
-        element.size === billingDetail.sizeProduct
-      );
+  let billingDetails = await BillingDetails.getCartForCustomer();
+  let total = 0;
+  if (billingDetails) {
+    let arrPromiesGetProduct = billingDetails.map((billingDetail) => {
+      total += billingDetail.price * billingDetail.quantity;
+      return Product.findOne({
+        name: billingDetail.nameProduct,
+        color: billingDetail.colorProduct,
+        size: billingDetail.sizeProduct,
+      });
     });
-    cartElement
-      .querySelector("#container_product")
-      .appendChild(product(item, billingDetail.quantity));
-  });
+    let products = await Promise.all(arrPromiesGetProduct);
+    billingDetails.forEach((billingDetail) => {
+      let item = products.find((element) => {
+        return (
+          element.name === billingDetail.nameProduct &&
+          element.color === billingDetail.colorProduct &&
+          element.size === billingDetail.sizeProduct
+        );
+      });
+      cartElement
+        .querySelector("#container_product")
+        .appendChild(product(item, billingDetail.quantity));
+      cartElement.querySelector(".container_total > div > .total").innerHTML =
+        total;
+    });
+  }
+
   let btnPayment = button({
     text: "Thanh toán",
     tag: "button",

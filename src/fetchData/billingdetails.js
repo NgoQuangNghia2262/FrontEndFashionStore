@@ -1,4 +1,5 @@
 import { fetchData } from "./fetchData.js";
+import { Variable } from "../static/variable.js";
 export class BillingDetails {
   constructor({
     id,
@@ -18,7 +19,7 @@ export class BillingDetails {
     this.quantity = quantity;
   }
   async create() {
-    const url = `http://localhost:8080/v1/data/billingdetails/create`;
+    const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/create`;
     await fetchData(url, {
       method: "POST",
       headers: {
@@ -30,12 +31,31 @@ export class BillingDetails {
       body: JSON.stringify(this),
     });
   }
-  async delete() {}
+  delete() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/delete`;
+        await fetchData(url, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Origin": "*",
+          },
+          credentials: "include",
+          body: JSON.stringify(this),
+        });
+        resolve("Success !!!");
+      } catch (error) {
+        reject("Fail");
+      }
+    });
+  }
   async update() {}
   static async findBillingDetailsByIdBill(idBill) {
     try {
       let res = await fetchData(
-        `http://localhost:8080/v1/data/billingdetails/findBillingDetailsByIdBill?idbill=${idBill}`
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/findBillingDetailsByIdBill?idbill=${idBill}`
       );
       if (res.status === 200) {
         let billingDetails = res.data.map((billingDetail) => {
@@ -52,7 +72,7 @@ export class BillingDetails {
   static async getCartForCustomer() {
     try {
       let res = await fetchData(
-        `http://localhost:8080/v1/data/billingdetails/getCartForCustomer`,
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/getCartForCustomer`,
         {
           method: "GET",
           headers: {

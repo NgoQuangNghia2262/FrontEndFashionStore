@@ -1,4 +1,5 @@
 import { fetchData } from "./fetchData.js";
+import { Variable } from "../static/variable.js";
 import { BillingDetails } from "./billingdetails.js";
 export class Bill {
   constructor({ id, date, status, discount, note, customer }) {
@@ -12,7 +13,7 @@ export class Bill {
     this.customer = customer ? customer : "";
   }
   async findBillForCustomer() {
-    const url = `http://localhost:8080/v1/data/bill/findBillForCustomer?customer=${this.customer}`;
+    const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/findBillForCustomer?customer=${this.customer}`;
     let res = fetchData(url);
     if (res.status !== 200) {
       //throw e
@@ -22,7 +23,7 @@ export class Bill {
   async getTotalAmount() {
     try {
       const res = await fetchData(
-        `http://localhost:8080/v1/data/bill/getTotalAmount?id=${this.id}`
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/getTotalAmount?id=${this.id}`
       );
       if (res.status !== 200) {
         return 0;
@@ -45,7 +46,7 @@ export class Bill {
   static async findBillDaybetwenDay({ firstDay, seccondDay }) {
     try {
       const billJson = await fetchData(
-        `http://localhost:8080/v1/data/bill/findBillDaybetwenDay?firstDay=${firstDay}&seccondDay=${seccondDay}`
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/findBillDaybetwenDay?firstDay=${firstDay}&seccondDay=${seccondDay}`
       );
       const bills = billJson.data.map((billJson) => {
         return new Bill(billJson);
@@ -59,7 +60,7 @@ export class Bill {
   static async getRevenueForDaybetwenDay({ firstDay, seccondDay }) {
     try {
       const res = await fetchData(
-        `http://localhost:8080/v1/data/bill/getRevenueForDaybetwenDay?firstDay=${firstDay}&seccondDay=${seccondDay}`
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/getRevenueForDaybetwenDay?firstDay=${firstDay}&seccondDay=${seccondDay}`
       );
       if (res.status !== 200) {
         return 0;
@@ -72,7 +73,7 @@ export class Bill {
   static Order({ id, note }) {
     return new Promise(async (resolve, reject) => {
       const response = await fetchData(
-        "http://localhost:8080/v1/data/bill/Order",
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/Order`,
         {
           method: "PUT",
           headers: {
@@ -84,7 +85,7 @@ export class Bill {
           body: JSON.stringify({ id, note }),
         }
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         resolve(response.data);
       } else {
         reject("Fail");

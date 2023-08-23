@@ -14,27 +14,35 @@ import { profile } from "./Pages/Profile/profile.js";
 import { dashboard } from "./Pages/Dashboard/dashboard.js";
 import { listproduct } from "./Pages/Dashboard/ListProduct/listproduct.js";
 import { posv1 } from "./Pages/PosV1/posv1.js";
+import { blog } from "./DefaultLayouts/Blog/blog.js";
+import { brand } from "./DefaultLayouts/Brand/brand.js";
 
-const routes = [
-  { path: "/", view: home, SPA: 1 },
-  { path: "/product", view: product, SPA: 1 },
-  { path: "/register", view: register, SPA: 1 },
-  { path: "/login", view: login, SPA: 0 },
-  { path: "/cart", view: cart, SPA: 1 },
-  { path: "/profile", view: profile, SPA: 1 },
-  { path: "/product/category", view: category, SPA: 1 },
-  { path: "/payment", view: payment, SPA: 1 },
-  { path: "/dashboard", view: dashboard, SPA: 1 },
-  { path: "/dashboard/listproduct", view: listproduct, SPA: 1 },
-  { path: "/pos_v1", view: posv1, SPA: 1 },
+const routers = [
+  { path: "/", view: home, SPA: 1, title: "Trang chủ" },
+  { path: "/product", view: product, SPA: 1, title: "Sản phẩm" },
+  { path: "/register", view: register, SPA: 1, title: "Đăng ký" },
+  { path: "/login", view: login, SPA: 0, title: "Đăng nhập" },
+  { path: "/cart", view: cart, SPA: 1, title: "Giỏ hàng" },
+  { path: "/profile", view: profile, SPA: 1, title: "Profile" },
+  { path: "/product/category", view: category, SPA: 1, title: "Trang chủ" },
+  { path: "/payment", view: payment, SPA: 1, title: "Trang chủ" },
+  { path: "/dashboard", view: dashboard, SPA: 0, title: "dashboard" },
+  {
+    path: "/dashboard/listproduct",
+    view: listproduct,
+    SPA: 1,
+    title: "Trang chủ",
+  },
+  { path: "/pos_v1", view: posv1, SPA: 0, title: "Trang chủ" },
 ];
 const router = () => {
-  const router = routes.find((router) => {
+  const router = routers.find((router) => {
     return router.path === location.pathname;
   });
   if (!router) {
     return NotFound();
   }
+  document.title = router.title;
   return router.view();
 };
 
@@ -44,8 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!href) {
       return;
     }
-    const hrefsplit = href.split("http://localhost:8001/");
-    const router = routes.find((router) => {
+    const hrefsplit = href.split("http://localhost:8000/");
+    const router = routers.find((router) => {
       return router.path === "/" + hrefsplit[hrefsplit.length - 1];
     });
     if (router.SPA === 1) {
@@ -54,12 +62,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const html = await router.view();
       document.querySelector("#page").innerHTML = "";
       document.querySelector("#page").appendChild(html);
+      document.title = router.title;
     }
   });
   const html = await router();
   document.querySelector("#page").appendChild(html);
 });
-function main() {
+async function main() {
   const page = document.createElement("div");
   page.id = "page";
   const root = document.querySelector("#root");
@@ -72,9 +81,11 @@ function main() {
   } else if (location.pathname.startsWith("/pos")) {
     root.appendChild(page);
   } else {
-    root.appendChild(header());
+    root.appendChild(await header());
     root.appendChild(headermenu());
     root.appendChild(page);
+    root.appendChild(await blog());
+    root.appendChild(brand());
     root.appendChild(footer());
   }
 }

@@ -1,0 +1,9 @@
+#DefaultLayouts_Brand{
+    & .container_brand {
+        width: 75%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content:space-around;
+    }
+}

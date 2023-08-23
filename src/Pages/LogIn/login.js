@@ -23,7 +23,7 @@ export const login = () => {
     <label for="password">Mật khẩu:</label>
     <input type="password" id="password" name="password" required />
     <br />
-    <a href="./regist" data-link>Bạn chưa có tài khoản ?</a>
+    <a href="/register" data-link>Bạn chưa có tài khoản ?</a>
   `;
   const buttonLogin = button({
     text: "Đăng nhập",

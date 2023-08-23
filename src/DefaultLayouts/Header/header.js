@@ -116,7 +116,7 @@ const NotLoggedIn = () => {
     .appendChild(btnRegister);
   return header_TopBar_Container_User;
 };
-export const header = () => {
+export const header = async () => {
   const headerElement = document.createElement("header");
   headerElement.id = "DefaultLayout_Header";
   headerElement.innerHTML = `

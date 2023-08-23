@@ -1,4 +1,5 @@
 import { fetchData } from "./fetchData.js";
+import { Variable } from "../static/variable.js";
 export class User {
   constructor({ username, password, permissions }) {
     (this.username = username.trim()),
@@ -8,7 +9,7 @@ export class User {
   static async getLoggedInUser() {
     try {
       let res = await fetchData(
-        "http://localhost:8080/v1/data/user/getLoggedInUser",
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/user/getLoggedInUser`,
         {
           method: "GET",
           headers: {
@@ -19,6 +20,7 @@ export class User {
           credentials: "include",
         }
       );
+      console.log(res);
       return new User(res.data);
     } catch (error) {
       console.log(error);

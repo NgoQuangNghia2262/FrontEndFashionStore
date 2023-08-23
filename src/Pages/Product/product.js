@@ -180,9 +180,8 @@ export const product = async () => {
     let quantityDetails = document.querySelector(
       "#PageProduct .wrapquantity .textQuantity"
     );
-    console.log(quantityDetails);
     if (!productSelected) {
-      alert("Fail");
+      alert("Vui lòng chọn size và màu sản phẩm");
       return;
     }
     const billingDetail = new BillingDetails({
