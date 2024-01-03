@@ -1,0 +1,152 @@
+#PageDashboardListproduct{
+    background-color: white;
+    & > .container{
+        & > .title{
+            display: inline-block;
+            padding: 0.428571rem 1.14286rem;
+            cursor: pointer;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            font-size: 1rem;
+            line-height: 1.42857rem;
+            height: 3.42857rem;
+            color: rgb(0, 136, 255);
+            font-weight: 500;
+            border-bottom: 2px solid rgb(0, 136, 255);
+        }
+        & > .search_filter{
+            padding: 15px 25px;
+            display: flex;justify-content: space-between;
+            & > .search{
+                position: relative;
+                width: 30%;
+                height: 35px;
+                & > .search_icon{
+                    position: absolute;top: 28%;left: 10px;
+                    width: 24px;height: 24px;
+                    color: rgb(163, 168, 175);
+                }
+                & > .search_input{
+                    width: 100%;height: 100%;
+                    & > input{
+                        cursor: text;
+                        padding: 20px 40px;
+                        width: 100%;height: 100%;
+                        border-radius: 3px;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+                        font-weight: 400;
+                        font-size: 1rem;
+                        color: rgb(15, 24, 36);
+                        background: transparent;
+                        border: 1px solid #d3d5d7;
+                    }
+                }
+            }
+            & > .filter{
+                display: flex;
+                align-items: center;
+                justify-content: end;
+                & > .filter_category{
+                    position: relative;top:-17px;right: 110px;
+                    width: 200px;
+                    margin-left: 10px;
+
+                }
+                & > .filter_color{
+                    position: relative;top:-17px;right: 110px;
+                    width: 200px;
+                    margin-left: 10px;
+                }
+                & > .filter_size{
+                    position: relative;top:-17px;right: 110px;
+                    width: 200px;
+                    margin-left: 10px;
+                }
+                & .filer_options{
+                    height: 42px;width: 200px;
+                    box-shadow: 0px 2px 4px rgba(168, 168, 168, 0.25);
+                    background-color: white;
+                    border: 1px #d3d5d7 solid;
+                    margin-left: 10px;
+                    position: absolute;top:0;left:50%;z-index: 3;
+                    overflow: hidden;
+                    &:hover{
+                        height: 150px;
+                        overflow-y: scroll;
+                    }
+                    & > svg{
+                        width: 24px;height: 24px;
+                        position: absolute;top: 10px;right: 3px;
+                    }
+                    & > li{
+                        text-align: center;
+                        line-height: 42px;
+                        &:hover{
+                            background-color: aqua;
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+        & > .title_list_product{
+            width: 100%;
+            padding: 20px 0;
+            color: rgb(15, 24, 36);
+            background-color: rgb(244, 246, 248);
+            border-bottom: 1px solid #e8eaeb;
+            display: grid;
+            grid-template-columns:125px 350px 200px 125px 125px 125px 125px;
+            & > h4{
+                text-align: center;
+            }
+        }
+        & > #list_product{
+            min-height: 50px;
+            & > .loader{
+                left: 49%;
+            }
+            & > .list_product-item{
+                opacity: 0.8;
+                padding: 10px 0;
+                display: grid;
+                grid-template-columns:125px 350px 200px 125px 125px 125px 125px;
+                border-bottom: 1px solid #e8eaeb;
+                &:hover{
+                    opacity: 1;
+                    color: rgb(0, 136, 255);;
+                }
+                & > p{
+                    padding-top: 18px;
+                    text-align: center;
+                }
+                & > img{
+                    text-align: center;
+                    width: 50px;
+                    height: 50px;
+                    margin-left: 38px;
+                    border-radius: 5px;
+                }
+            }
+        }
+        & > .pagination{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+            & > svg{
+                margin: 0 10px;
+                width: 24px;height: 24px;cursor: pointer;
+            }
+            & > span{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 24px;height: 24px;
+                font-size: 16px;
+                background-color: rgb(0, 136, 255);
+                border-radius: 50%;
+                color: white;
+            }
+        }
+    }
+}

@@ -12,66 +12,99 @@ export class Product {
     describe,
     inventory,
   }) {
-    this.img = img.trim();
+    this.img = `${Variable.PROTOCOL}://${Variable.DOMAIN}${
+      Variable.PROT
+    }/v1/data/image/${img.trim()}`;
     this.name = name.trim();
-    this.category = category.trim();
+    this.category = category ? category.trim() : undefined;
     this.color = color ? color.trim() : undefined;
     this.size = size ? size.trim() : undefined;
     this.price = price;
     this.discount = discount;
-    this.describe = describe.trim();
+    this.describe = describe ? describe.trim() : undefined;
     this.inventory = inventory;
   }
-  static async findOne({ name, color, size }) {
-    try {
-      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findone?name=${name}&color=${color}&size=${size}`;
-      const productJson = await fetchData(url);
-      return new Product(productJson.data);
-    } catch {
-      return null;
-    }
+  static findOne({ name, color, size }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/product/find-one`;
+        const res = await fetchData(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, color, size }),
+        });
+        debugger;
+        if (res.statusCode == 200) {
+          resolve(res.data);
+        } else {
+          reject(res.message);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
-  static async findAll() {
-    try {
-      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findall`;
-      const productsJson = await fetchData(url);
-      const products = productsJson.data.map((product) => {
-        return new Product(product);
-      });
-      return products;
-    } catch {
-      return null;
-    }
+  static findAll(pagesize, pagenumber) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let url = `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/product/find-all?PageSize=${pagesize}&PageNumber=${pagenumber}`;
+        const res = await fetchData(url);
+        if (res.statusCode == 200) {
+          const products = res.data.map((product) => {
+            return new Product(product);
+          });
+          resolve(products);
+        } else {
+          reject(res.message);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
   static async findProductByName(name) {
-    try {
-      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findproductbyname?name=${name}`;
-      const productsJson = await fetchData(url);
-      const products = productsJson.data.map((product) => {
-        return new Product(product);
-      });
-      return products;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/product/FindProductByName?name=${name}`;
+        const res = await fetchData(url);
+        if (res.statusCode == 200) {
+          const products = res.data.map((product) => {
+            return new Product(product);
+          });
+          resolve(products);
+        } else {
+          reject(res.message);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
-  static async findProductBySize(size) {
-    try {
-      const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findproductbysize?size=${size}`;
-      const productsJson = await fetchData(url);
-      const products = productsJson.data.map((product) => {
-        return new Product(product);
-      });
-      return products;
-    } catch {
-      return null;
-    }
+  static findProductGroupByName({ pagesize, pagenumber }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await fetchData(
+          `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/product/FindImgNamePriceProducts?PageSize=${pagesize}&PageNumber=${pagenumber}`
+        );
+        if (res.statusCode == 200) {
+          const products = res.data.map((product) => {
+            return new Product(product);
+          });
+          resolve(products);
+        } else {
+          reject(res.message);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
-  static async findProductByPrice(price) {
+  static async findProductByWord(word) {
     try {
       const productsJson = await fetchData(
-        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findProductByPrice?Price = ${price}`
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findProductByWord?word=${word}`
       );
       const products = productsJson.data.map((product) => {
         return new Product(product);
@@ -81,19 +114,28 @@ export class Product {
       return null;
     }
   }
-  static async findProductGroupByName() {
-    try {
-      const productsJson = await fetchData(
-        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/product/findproductgroupbyname`
-      );
-      const products = productsJson.data.map((product) => {
-        return new Product(product);
-      });
-      return products;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+  create() {
+    return new Promise(async (resolve, reject) => {
+      fetchData(
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/product/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this),
+        }
+      )
+        .then((res) => {
+          if (res.statusCode == 200) {
+            resolve("Succecc !!");
+          } else {
+            reject(`fail with statusCode ${res.statusCode}`);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
-  async create() {}
 }

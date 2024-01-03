@@ -1,4 +1,6 @@
 import { button } from "../../components/Button/button.js";
+import { Authentication } from "../../fetchData/authentication.js";
+import { User } from "../../fetchData/user.js";
 import sheet from "./header.css" assert { type: "css" };
 document.adoptedStyleSheets.push(sheet);
 const LoggedIn = () => {
@@ -49,10 +51,14 @@ const LoggedIn = () => {
   const btnLogOut = button({
     tag: "a",
     text: "Đăng xuất",
-    href: "/login",
   });
-  btnLogOut.addEventListener("click", () => {
-    localStorage.setItem("accessToken", "");
+  btnLogOut.addEventListener("click", async () => {
+    try {
+      await Authentication.LogOut();
+      location.href = "/login";
+    } catch (error) {
+      console.log(error);
+    }
   });
   header_TopBar_Container_User.querySelector(".login").appendChild(btnLogIn);
   header_TopBar_Container_User
@@ -123,8 +129,9 @@ export const header = async () => {
     <div class="header_TopBar" style="width: 100%">
       <div class="header_TopBar_Container">
       <div class="header_TopBar_Container_Logo">
-      <a href="/">
-        <img src="./images/logo.webp" alt="" />
+      <a href="/" aria-label="Read more about Seminole tax hike">
+      <img src="./images/logo.webp" alt="" />
+        
       </a>
     </div>
     <div class="header_TopBar_Container_Search">
@@ -150,11 +157,16 @@ export const header = async () => {
       </div>
     </div>
   `;
-  const header_TopBar_Container_User = localStorage.getItem("accessToken")
-    ? LoggedIn()
-    : NotLoggedIn();
-  headerElement
-    .querySelector(".header_TopBar_Container")
-    .appendChild(header_TopBar_Container_User);
+  const userLogin = await User.getLoggedInUser()
+    .then((user) => {
+      headerElement
+        .querySelector(".header_TopBar_Container")
+        .appendChild(LoggedIn());
+    })
+    .catch(() => {
+      headerElement
+        .querySelector(".header_TopBar_Container")
+        .appendChild(NotLoggedIn());
+    });
   return headerElement;
 };

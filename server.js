@@ -29,7 +29,7 @@ app.get(
   (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     if (!accessToken) {
-      return res.redirect("/");
+      return res.redirect("/login");
     }
     next();
   },
@@ -44,18 +44,6 @@ app.get("/get_html_elle_vn", async (req, res) => {
     const response = await fetch(targetUrl);
     const html = await response.text();
     res.send(html);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-app.get("/test", async (req, res) => {
-  const targetUrl = "http://localhost:8080/v1/data/user/getLoggedInUser";
-  try {
-    const response = await fetch(targetUrl, {
-      credentials: "include",
-    });
-    const result = await response.json();
-    res.send(result);
   } catch (error) {
     res.status(500).send(error.message);
   }

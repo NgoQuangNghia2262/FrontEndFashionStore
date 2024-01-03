@@ -41,7 +41,7 @@ export const register = async () => {
     const res = await Authentication.Register({
       username,
       password,
-      permissions: "customer",
+      permissions: "Customer",
     });
     if (res) {
       alert("Thanh cong");

@@ -1,5 +1,3 @@
-import { fetchData } from "./fetchData.js";
-import { Variable } from "../static/variable.js";
 export class BillingDetails {
   constructor({
     id,
@@ -17,82 +15,5 @@ export class BillingDetails {
     this.nameProduct = nameProduct.trim();
     this.colorProduct = colorProduct.trim();
     this.quantity = quantity;
-  }
-  async create() {
-    const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/create`;
-    await fetchData(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify(this),
-    });
-  }
-  delete() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/delete`;
-        await fetchData(url, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Origin": "*",
-          },
-          credentials: "include",
-          body: JSON.stringify(this),
-        });
-        resolve("Success !!!");
-      } catch (error) {
-        reject("Fail");
-      }
-    });
-  }
-  async update() {}
-  static async findBillingDetailsByIdBill(idBill) {
-    try {
-      let res = await fetchData(
-        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/findBillingDetailsByIdBill?idbill=${idBill}`
-      );
-      if (res.status === 200) {
-        let billingDetails = res.data.map((billingDetail) => {
-          return new BillingDetails(billingDetail);
-        });
-        return billingDetails;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
-  }
-  static async getCartForCustomer() {
-    try {
-      let res = await fetchData(
-        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/billingdetails/getCartForCustomer`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Origin": "*",
-          },
-          credentials: "include",
-        }
-      );
-      if (res.status === 200) {
-        let billingDetails = res.data.map((billingDetail) => {
-          return new BillingDetails(billingDetail);
-        });
-        return billingDetails;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
   }
 }

@@ -2,17 +2,8 @@ import { Authentication } from "../../fetchData/authentication.js";
 import { button } from "../../components/Button/button.js";
 import sheet from "./login.css" assert { type: "css" };
 document.adoptedStyleSheets.push(sheet);
-async function fetchData(coursAPI, data) {
-  try {
-    const response = await fetch(coursAPI, data);
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
-export const login = () => {
+export const login = async () => {
   const loginElement = document.createElement("div");
   loginElement.id = "loginPage";
   loginElement.innerHTML = `
@@ -32,14 +23,15 @@ export const login = () => {
   buttonLogin.addEventListener("click", async () => {
     const username = loginElement.querySelector("#username").value;
     const password = loginElement.querySelector("#password").value;
-    const accessToken = await Authentication.Login({ username, password });
-    if (accessToken) {
-      location.href = "/";
-      localStorage.setItem("accessToken", accessToken);
-      alert("Success");
-    } else {
-      alert("Wrong password");
-    }
+    await Authentication.Login({ username, password })
+      .then((data) => {
+        location.href = "/";
+        localStorage.setItem("accessToken", username);
+        alert(data);
+      })
+      .catch((err) => {
+        alert("Lỗi");
+      });
   });
 
   loginElement.appendChild(buttonLogin);

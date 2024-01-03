@@ -4,24 +4,25 @@ import { button } from "../../components/Button/button.js";
 import sheet from "./cart.css" assert { type: "css" };
 import { Bill } from "../../fetchData/bill.js";
 import { Variable } from "../../static/variable.js";
+import { User } from "../../fetchData/user.js";
 document.adoptedStyleSheets.push(sheet);
 
-const product = (product, quantity) => {
+const product = (billingDetail) => {
   const productElement = document.createElement("div");
   productElement.className = "product-item";
   productElement.innerHTML = `
   <div class="left">
     <img src="${Variable.PROTOCOL}://${Variable.DOMAIN}${
     Variable.PROT
-  }/v1/data/image/${product.img}" alt="">
-    <span>${product.name}</span>
-    <span>${product.size}</span>
-    <span>${product.color}</span>
+  }/v1/data/image/${billingDetail.product.img}" alt="">
+    <span>${billingDetail.product.name}</span>
+    <span>${billingDetail.product.size}</span>
+    <span>${billingDetail.product.color}</span>
   </div>
   <div class="right">
-    <p class="price">${product.price}</p>
-    <p class="quantity">${quantity}</p>
-    <p class="price">${product.price * quantity}</p>
+    <p class="price">${billingDetail.product.price}</p>
+    <p class="quantity">${billingDetail.quantity}</p>
+    <p class="price">${billingDetail.product.price * billingDetail.quantity}</p>
     <img src="./images/icons8-delete.svg" alt="" />
   </div>
   `;
@@ -32,19 +33,13 @@ const product = (product, quantity) => {
       if (!confirmDelete) {
         return;
       }
-      const billingDetail_Seleted = new BillingDetails({
-        nameProduct: product.name,
-        sizeProduct: product.size,
-        colorProduct: product.color,
-      });
-      billingDetail_Seleted
-        .delete()
+      await User.RemoveProductsFromCart(billingDetail)
         .then((mess) => {
-          location.href = "/cart";
           alert(mess);
+          productElement.remove();
         })
-        .catch((mess) => {
-          alert(mess);
+        .catch((err) => {
+          alert(err);
         });
     });
   return productElement;
@@ -76,29 +71,15 @@ export const cart = async () => {
     </nav>
   </div>
   `;
-  let billingDetails = await BillingDetails.getCartForCustomer();
+  let billingDetails = await User.getCartForCustomer().catch((err) => {
+    alert(err);
+  });
   let total = 0;
   if (billingDetails) {
-    let arrPromiesGetProduct = billingDetails.map((billingDetail) => {
-      total += billingDetail.price * billingDetail.quantity;
-      return Product.findOne({
-        name: billingDetail.nameProduct,
-        color: billingDetail.colorProduct,
-        size: billingDetail.sizeProduct,
-      });
-    });
-    let products = await Promise.all(arrPromiesGetProduct);
     billingDetails.forEach((billingDetail) => {
-      let item = products.find((element) => {
-        return (
-          element.name === billingDetail.nameProduct &&
-          element.color === billingDetail.colorProduct &&
-          element.size === billingDetail.sizeProduct
-        );
-      });
       cartElement
         .querySelector("#container_product")
-        .appendChild(product(item, billingDetail.quantity));
+        .appendChild(product(billingDetail));
       cartElement.querySelector(".container_total > div > .total").innerHTML =
         total;
     });
@@ -118,13 +99,15 @@ export const cart = async () => {
       );
       return;
     }
-    Bill.Order({ note: noteAddress })
+    Bill.PlacingAnOrder(noteAddress)
       .then(() => {
         location.href = "/";
-        alert("Success");
+        alert(
+          "Đặt hàng thành công chúng tôi sẽ giao hàng cho bạn trong vòng 3-4 ngày tới"
+        );
       })
-      .catch(() => {
-        alert("Fail");
+      .catch((err) => {
+        alert(err);
       });
   });
   cartElement.querySelector(".container_total").appendChild(btnPayment);

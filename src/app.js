@@ -21,17 +21,17 @@ const routers = [
   { path: "/", view: home, SPA: 1, title: "Trang chủ" },
   { path: "/product", view: product, SPA: 1, title: "Sản phẩm" },
   { path: "/register", view: register, SPA: 1, title: "Đăng ký" },
-  { path: "/login", view: login, SPA: 0, title: "Đăng nhập" },
+  { path: "/login", view: login, SPA: 1, title: "Đăng nhập" },
   { path: "/cart", view: cart, SPA: 1, title: "Giỏ hàng" },
   { path: "/profile", view: profile, SPA: 1, title: "Profile" },
-  { path: "/product/category", view: category, SPA: 1, title: "Trang chủ" },
+  { path: "/product/category", view: category, SPA: 0, title: "Trang chủ" },
   { path: "/payment", view: payment, SPA: 1, title: "Trang chủ" },
   { path: "/dashboard", view: dashboard, SPA: 0, title: "dashboard" },
   {
     path: "/dashboard/listproduct",
     view: listproduct,
-    SPA: 1,
-    title: "Trang chủ",
+    SPA: 0,
+    title: "Danh sách sản phẩm",
   },
   { path: "/pos_v1", view: posv1, SPA: 0, title: "Trang chủ" },
 ];
@@ -43,31 +43,10 @@ const router = () => {
     return NotFound();
   }
   document.title = router.title;
-  return router.view();
+  return router;
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
-  document.body.addEventListener("click", async (e) => {
-    let href = e.target.href;
-    if (!href) {
-      return;
-    }
-    const hrefsplit = href.split("http://localhost:8000/");
-    const router = routers.find((router) => {
-      return router.path === "/" + hrefsplit[hrefsplit.length - 1];
-    });
-    if (router.SPA === 1) {
-      e.preventDefault();
-      history.pushState(null, null, e.target.href);
-      const html = await router.view();
-      document.querySelector("#page").innerHTML = "";
-      document.querySelector("#page").appendChild(html);
-      document.title = router.title;
-    }
-  });
-  const html = await router();
-  document.querySelector("#page").appendChild(html);
-});
+document.addEventListener("DOMContentLoaded", async () => {});
 async function main() {
   const page = document.createElement("div");
   page.id = "page";
@@ -88,5 +67,26 @@ async function main() {
     root.appendChild(brand());
     root.appendChild(footer());
   }
+  const routerNow = router();
+  const html = await routerNow.view();
+  document.querySelector("#page").appendChild(html);
+  document.body.addEventListener("click", async (e) => {
+    let href = e.target.href;
+    if (!href) {
+      return;
+    }
+    const hrefsplit = href.split("http://localhost:8000/");
+    const routerNext = routers.find((router) => {
+      return router.path === "/" + hrefsplit[hrefsplit.length - 1];
+    });
+    if (routerNext.SPA === routerNow.SPA) {
+      e.preventDefault();
+      history.pushState(null, null, e.target.href);
+      const html = await routerNext.view();
+      document.querySelector("#page").innerHTML = "";
+      document.querySelector("#page").appendChild(html);
+      document.title = routerNext.title;
+    }
+  });
 }
 main();

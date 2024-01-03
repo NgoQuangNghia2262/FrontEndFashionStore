@@ -37,7 +37,10 @@ export const home = async () => {
   </div>
   </section>
   `;
-  let products = await Product.findProductGroupByName();
+  let products = await Product.findProductGroupByName({
+    pagesize: 6,
+    pagenumber: 1,
+  });
   homeElement.appendChild(
     listProduct({
       title: "SẢN PHẨM HOT",

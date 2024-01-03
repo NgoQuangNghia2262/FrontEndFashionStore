@@ -15,7 +15,7 @@ export class Bill {
   async findBillForCustomer() {
     const url = `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/findBillForCustomer?customer=${this.customer}`;
     let res = fetchData(url);
-    if (res.status !== 200) {
+    if (res.status != 200) {
       //throw e
     }
     return new Bill(res.data);
@@ -70,25 +70,43 @@ export class Bill {
       return 0;
     }
   }
-  static Order({ id, note }) {
+  static PlacingAnOrder(note) {
     return new Promise(async (resolve, reject) => {
       const response = await fetchData(
-        `${Variable.PROTOCOL}://${Variable.DOMAIN}${Variable.PROT}/v1/data/bill/Order`,
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/customer/PlacingAnOrder`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Origin": "*",
           },
           credentials: "include",
-          body: JSON.stringify({ id, note }),
+          body: JSON.stringify(note),
         }
       );
-      if (response.status === 201) {
-        resolve(response.data);
+      if (response.statusCode == 200) {
+        resolve("Success");
       } else {
-        reject("Fail");
+        reject(`fail with statuscode ${response.statusCode}`);
+      }
+    });
+  }
+  static Purchase(billingDetail) {
+    return new Promise(async (resolve, reject) => {
+      const res = await fetchData(
+        `${Variable.PROTOCOL}://${Variable.DOMAIN}:${Variable.PROT_GATEWAY}/${Variable.SERVICE_ASPNET}/api/bill/purchase`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(billingDetail),
+        }
+      );
+      if (res.statusCode == 200) {
+        resolve("Successfully");
+      } else {
+        reject(res.message);
       }
     });
   }

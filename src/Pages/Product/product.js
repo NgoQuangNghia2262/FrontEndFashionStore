@@ -1,17 +1,11 @@
 import { button } from "../../components/Button/button.js";
 import { Bill } from "../../fetchData/bill.js";
-import { User } from "../../fetchData/user.js";
-import { BillingDetails } from "../../fetchData/billingdetails.js";
 import { Product } from "../../fetchData/product.js";
+import { fetchData } from "../../fetchData/fetchData.js";
 import sheet from "./product.css" assert { type: "css" };
 document.adoptedStyleSheets.push(sheet);
 
 let productSelected;
-const fetchData = async (url, data) => {
-  let res = await fetch(url);
-  let result = await res.json();
-  return result.data;
-};
 const wrapcolor = (colors) => {
   let wrapcolorElement = document.createElement("div");
   wrapcolorElement.className = "wrapcolor";
@@ -34,13 +28,15 @@ const wrapcolor = (colors) => {
       coloritemElement.classList.add("selected");
       let sizeitemElement = document.querySelector(".wrapsize .size .selected");
       if (sizeitemElement) {
-        productSelected = await Product.findOne({
-          name: localStorage.getItem("product"),
+        await Product.findOne({
+          name: localStorage.getItem("nameproduct"),
           color: coloritemElement.innerHTML,
           size: sizeitemElement.innerHTML,
+        }).then((data) => {
+          productSelected = data;
+          let inventory = document.querySelector(".wrapquantity .inventory");
+          inventory.innerHTML = data.inventory;
         });
-        let inventory = document.querySelector(".wrapquantity .inventory");
-        inventory.innerHTML = productSelected ? productSelected.inventory : 0;
       }
     });
     colorElement.appendChild(coloritemElement);
@@ -71,13 +67,15 @@ const wrapsize = (sizes) => {
         ".wrapcolor .color .selected"
       );
       if (coloritemElement) {
-        productSelected = await Product.findOne({
-          name: localStorage.getItem("product"),
+        await Product.findOne({
+          name: localStorage.getItem("nameproduct"),
           color: coloritemElement.innerHTML,
           size: sizeitemElement.innerHTML,
+        }).then((data) => {
+          productSelected = data;
+          let inventory = document.querySelector(".wrapquantity .inventory");
+          inventory.innerHTML = data.inventory;
         });
-        let inventory = document.querySelector(".wrapquantity .inventory");
-        inventory.innerHTML = productSelected ? productSelected.inventory : 0;
       }
     });
     sizeElement.appendChild(sizeitemElement);
@@ -116,7 +114,7 @@ const wrapquantity = (product) => {
 
 export const product = async () => {
   let products = await Product.findProductByName(
-    localStorage.getItem("product")
+    localStorage.getItem("nameproduct")
   );
   let colors = [];
   let sizes = [];
@@ -133,7 +131,7 @@ export const product = async () => {
   productElement.innerHTML = `
   <div class="container">
     <div class="img">
-      <img src="http://localhost:8080/v1/data/image/${products[0].img}" alt="">
+      <img src="${products[0].img}" alt="">
     </div>
     <div class="info">
     <h2 class="title">${products[0].name}</h2>
@@ -184,16 +182,21 @@ export const product = async () => {
       alert("Vui lòng chọn size và màu sản phẩm");
       return;
     }
-    const billingDetail = new BillingDetails({
-      id: 0,
-      sizeProduct: productSelected.size,
-      colorProduct: productSelected.color,
-      nameProduct: productSelected.name,
-      price: productSelected.price,
+    const billingDetail = {
+      product: {
+        name: productSelected.name,
+        size: productSelected.size,
+        color: productSelected.color,
+      },
       quantity: quantityDetails.innerHTML,
-    });
-    await billingDetail.create();
-    alert("success");
+    };
+    await Bill.Purchase(billingDetail)
+      .then((mes) => {
+        alert(mes);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   });
   infoElement.appendChild(buttonBuyNow);
   infoElement.appendChild(buttonAddToCart);

@@ -9,7 +9,7 @@ export const product = (item) => {
  <div class="img">
  <a href="/product">
   <img
-    src="http://localhost:8080/v1/data/image/${item.img}"
+    src="${item.img}"
     alt=""
     style="height: 190px;width: 190px; border-radius: 10px;"
   />
@@ -24,7 +24,7 @@ export const product = (item) => {
  `;
   productElement.addEventListener("click", (e) => {
     e.preventDefault();
-    localStorage.setItem("product", item.name);
+    localStorage.setItem("nameproduct", item.name);
     window.location.href = "/product";
   });
   return productElement;
